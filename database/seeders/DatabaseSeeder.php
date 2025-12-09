@@ -27,6 +27,6 @@ class DatabaseSeeder extends Seeder
         Customer::factory()->count(20)->create();
         Product::factory()->count(30)->create();
         Vendor::factory()->count(20)->create();
-        StockMovement::factory()->count(500)->create();
+        StockMovement::factory()->count(1000)->create();
     }
 }

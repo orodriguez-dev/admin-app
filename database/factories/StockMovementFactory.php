@@ -35,7 +35,7 @@ class StockMovementFactory extends Factory
                 ? Vendor::inRandomOrder()->first()->id 
                 : null,
 
-            'movement_date' => $this->faker->dateTimeBetween('2024-01-01', '2024-12-31'),
+            'movement_date' => $this->faker->dateTimeBetween('2024-01-01', '2025-12-09'),
 
             'type' => $type,
             'quantity' => $this->faker->numberBetween(1, 20),
