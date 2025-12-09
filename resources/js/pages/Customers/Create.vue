@@ -53,7 +53,7 @@ const props = defineProps<{
                                         <SelectValue placeholder="Seleccionar" />
                                     </SelectTrigger>
                                     <SelectContent >
-                                        <SelectItem v-for="type in identificationTypes" :key="type.value" :value="type.value">
+                                        <SelectItem v-for="type in props.identificationTypes" :key="type.value" :value="type.value">
                                             {{ type.label }}
                                         </SelectItem>
                                     </SelectContent>

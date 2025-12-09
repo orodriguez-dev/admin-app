@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 
@@ -6,14 +6,14 @@ const start_date = ref('');
 const end_date = ref('');
 
 const submit = () => {
-    router.get(route('inventory.replenish'), {
+    router.get('/inventory/replenish', {
         start_date: start_date.value,
         end_date: end_date.value
     });
 };
 
 const props = defineProps({
-    products: Array,
+    products: Object,
     period: Object
 });
 </script>
@@ -52,7 +52,7 @@ const props = defineProps({
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="p in products" :key="p.id">
+                    <tr v-for="p in props.products" :key="p.id">
                         <td class="border p-2">{{ p.name }}</td>
                         <td class="border p-2">{{ p.current_sales }}</td>
                         <td class="border p-2">{{ p.previous_sales }}</td>
