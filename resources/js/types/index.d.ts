@@ -36,4 +36,44 @@ export interface User {
     updated_at: string;
 }
 
+export interface Customer {
+    id: number;
+    identification_type: string;
+    identification_type_label: string;
+    identification_number: string;
+    name: string;
+    trade_name?: string;
+    email?: string;
+    phone?: string;
+    mobile_phone?: string;
+    country?: string;
+    province?: string;
+    city?: string;
+    address?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Product {
+    id: number;
+    sku: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Vendor {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    contact_name: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

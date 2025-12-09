@@ -12,9 +12,13 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as customersIndex } from '@/routes/customers';
+import { index as productsIndex } from '@/routes/products';
+import { index as vendorsIndex } from '@/routes/vendors';
+import { replenish } from '@/routes/inventory';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, CircleUser, Package, Truck, TrendingUp } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -22,6 +26,26 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Clientes',
+        href: customersIndex(),
+        icon: CircleUser,
+    },
+    {
+        title: 'Productos',
+        href: productsIndex(),
+        icon: Package,
+    },
+    {
+        title: 'Proveedores',
+        href: vendorsIndex(),
+        icon: Truck,
+    },
+    {
+        title: 'Reabastecimiento',   // <<---- NUEVO ITEM
+        href: replenish(),          // <<---- Ruta del core
+        icon: TrendingUp,           // <<---- Gráfico de análisis
     },
 ];
 
