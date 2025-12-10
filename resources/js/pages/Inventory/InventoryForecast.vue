@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { ref } from 'vue';
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { index, calculate } from '@/routes/forecast';
 import { BreadcrumbItem } from '@/types';
 
@@ -18,8 +18,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index().url,
     },
 ];
-
-const page = usePage();
 
 // --- 1. Interfaces TypeScript ---
 interface Product {
