@@ -15,7 +15,7 @@ import { dashboard } from '@/routes';
 import { index as customersIndex } from '@/routes/customers';
 import { index as productsIndex } from '@/routes/products';
 import { index as vendorsIndex } from '@/routes/vendors';
-import { replenish } from '@/routes/inventory';
+import { index as inventoryForecastIndex } from '@/routes/forecast';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, CircleUser, Package, Truck, TrendingUp } from 'lucide-vue-next';
@@ -43,9 +43,9 @@ const mainNavItems: NavItem[] = [
         icon: Truck,
     },
     {
-        title: 'Reabastecimiento',   // <<---- NUEVO ITEM
-        href: replenish(),          // <<---- Ruta del core
-        icon: TrendingUp,           // <<---- Gráfico de análisis
+         title: 'Reabastecimiento',   
+         href: inventoryForecastIndex(),   
+         icon: TrendingUp,  
     },
 ];
 
