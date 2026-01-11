@@ -10,6 +10,7 @@ import InputError from '@/components/InputError.vue';
 import { Spinner } from '@/components/ui/spinner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { useCustomerForm } from './Composables/useCustomerForm';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,11 +23,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 ];
 
-// Opciones de tipo identificación
-const props = defineProps<{
-  identificationTypes: { value: string; label: string }[],
-}>();
-
+const props = defineProps<{ identificationTypes: { value: string; label: string }[] }>();
+const { form, submit } = useCustomerForm({ identification_type: '', identification_number: '', name: '' }, store().url, 'post');
 </script>
 
 <template>
@@ -40,15 +38,14 @@ const props = defineProps<{
                 </CardHeader>
 
                 <CardContent>
-                    <Form v-bind="store.form()"
-                        :reset-on-success="['identification_type', 'identification_number', 'name']"
-                        v-slot="{ errors, processing }">
+                    <!-- <Form v-bind="store.form()" -->
+                    <Form @submit.prevent="submit">
                         <!-- 2 columnas -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Tipo Identificación -->
                             <div class="flex flex-col space-y-1.5">
                                 <Label for="identification_type">Tipo Identificación</Label>
-                                <Select id="identification_type" name="identification_type">
+                                <Select id="identification_type" name="identification_type" v-model="form.identification_type">
                                     <SelectTrigger class="w-full h-9">
                                         <SelectValue placeholder="Seleccionar" />
                                     </SelectTrigger>
@@ -59,22 +56,22 @@ const props = defineProps<{
                                     </SelectContent>
                                 </Select>
 
-                                <InputError :message="errors.identification_type" class="mt-2" />
+                                <InputError :message="form.errors.identification_type" class="mt-2" />
                             </div>
                             <!-- Número Identificación -->
                             <div class="flex flex-col space-y-1.5">
                                 <Label for="identification_number">N° Identificación</Label>
-                                <Input id="identification_number" name="identification_number" type="text"
+                                <Input id="identification_number" name="identification_number" v-model="form.identification_number" type="text"
                                     placeholder="N° Identificación" />
-                                <InputError :message="errors.identification_number" class="mt-2" />
+                                <InputError :message="form.errors.identification_number" class="mt-2" />
                             </div>
                         </div>
                         <!-- Campo Name (una sola columna) -->
                         <div class="grid gap-2 mt-4">
                             <Label for="name">Nombre Completo</Label>
-                            <Input id="name" name="name" class="mt-1 block w-full" autocomplete="name"
+                            <Input id="name" name="name" v-model="form.name" class="mt-1 block w-full" autocomplete="name"
                                 placeholder="Nombre completo" />
-                            <InputError :message="errors.name" class="mt-2" />
+                            <InputError :message="form.errors.name" class="mt-2" />
                         </div>
                         <!-- Footer visual dentro del CardContent pero funcional -->
                         <div class="flex justify-between mt-6">
@@ -82,8 +79,8 @@ const props = defineProps<{
                                 <Link :href="index().url">Atrás</Link>
                             </Button>
 
-                            <Button type="submit" :disabled="processing">
-                                <Spinner v-if="processing" />
+                            <Button type="submit" :disabled="form.processing">
+                                <Spinner v-if="form.processing" />
                                 Guardar
                             </Button>
                         </div>

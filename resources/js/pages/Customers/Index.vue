@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreVerticalIcon, Plus, Eye, Pencil, Trash2Icon } from 'lucide-vue-next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { ref } from 'vue';
+import { useCustomerDelete } from './Composables/useCustomerDelete';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -18,34 +19,9 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-interface Props {
-  customers: Customer[],
-}
+const props = defineProps<{ customers: Customer[] }>();
 
-const{ customers} = defineProps<Props>();
-
-// Modal de eliminación
-const showDeleteDialog = ref(false);
-const deletingCustomerId = ref<number | null>(null);
-
-const confirmDelete = (id: number) => {
-  deletingCustomerId.value = id;
-  showDeleteDialog.value = true;
-};
-
-const deleteCustomer = () => {
-  if (deletingCustomerId.value === null) return;
-
-  router.delete(destroy(deletingCustomerId.value).url, {
-    preserveScroll: true,
-    onSuccess: () => toast.success('Cliente eliminado correctamente'),
-    onError: () => toast.error('Error al eliminar el cliente'),
-    onFinish: () => {
-      showDeleteDialog.value = false;
-      deletingCustomerId.value = null;
-    },
-  });
-};
+const { showDialog, confirmDelete, deleteCustomer } = useCustomerDelete((id: number) => destroy(id).url);
 </script>
 
 <template>
@@ -117,14 +93,14 @@ const deleteCustomer = () => {
       <TableCaption>Lista de clientes.</TableCaption>
 
       <!-- Modal de confirmación de eliminación -->
-      <Dialog v-model:open="showDeleteDialog">
+      <Dialog v-model:open="showDialog">
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Eliminar Cliente</DialogTitle>
           </DialogHeader>
           <p>¿Estás seguro que deseas eliminar este cliente? Esta acción no se puede deshacer.</p>
           <DialogFooter class="flex justify-end gap-2">
-            <Button variant="outline" @click="showDeleteDialog = false">Cancelar</Button>
+            <Button variant="outline" @click="showDialog = false">Cancelar</Button>
             <Button variant="destructive" @click="deleteCustomer">Eliminar</Button>
           </DialogFooter>
         </DialogContent>

@@ -2,21 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\IdentificationType;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Services\CustomerService;
 use App\Models\Customer;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
+    protected CustomerService $service;
+
+    public function __construct(CustomerService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         return Inertia::render('Customers/Index', [
-            'customers' => Customer::all(),
+            'customers' => $this->service->listCustomers(),
         ]);
     }
 
@@ -25,15 +32,9 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $identificationTypes = array_map(function ($type) {
-            return [
-                'value' => $type->value,
-                'label' => $type->label(),
-            ];
-        }, IdentificationType::cases());
 
         return Inertia::render('Customers/Create', [
-            'identificationTypes' => $identificationTypes,
+            'identificationTypes' => $this->service->getIdentificationTypes(),
         ]);
     }
 
@@ -42,7 +43,7 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        Customer::create($request->validated());
+        $this->service->createCustomer($request->validated());
 
         return redirect()->route('customers.index');
     }
@@ -62,16 +63,9 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $identificationTypes = array_map(function ($type) {
-            return [
-                'value' => $type->value,
-                'label' => $type->label(),
-            ];
-        }, IdentificationType::cases());
-        
         return Inertia::render('Customers/Edit', [
             'customer' => $customer,
-            'identificationTypes' => $identificationTypes,
+            'identificationTypes' => $this->service->getIdentificationTypes(),
         ]);
     }
 
@@ -80,7 +74,7 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer->update($request->validated());
+         $this->service->updateCustomer($customer, $request->validated());
 
         return redirect()->route('customers.index');
     }
@@ -90,7 +84,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        $customer->delete();
+        $this->service->deleteCustomer($customer);
 
         return redirect()->route('customers.index');
     }

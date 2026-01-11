@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
+use App\Repositories\Eloquent\EloquentCustomerRepository;
+//use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            CustomerRepositoryInterface::class,
+            EloquentCustomerRepository::class
+        );
     }
 
     /**
@@ -21,8 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Solo la aplicamos en entornos de producción.
-        if ($this->app->environment('production', 'staging')) {
-            URL::forceScheme('https'); 
-        }
+        //if ($this->app->environment('production', 'staging')) {
+        //    URL::forceScheme('https'); 
+        //}
     }
 }

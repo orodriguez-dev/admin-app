@@ -11,19 +11,14 @@ import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'vue-sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { useCustomerForm } from './Composables/useCustomerForm';
 
 interface Props {
     customer: Customer,
     identificationTypes: { value: string; label: string }[],
 }
 
-const { customer, identificationTypes } = defineProps<Props>();
-
-const form = useForm({
-    identification_type: customer.identification_type,
-    identification_number: customer.identification_number,
-    name: customer.name,
-});
+const props = defineProps<{ customer: Customer; identificationTypes: { value: string; label: string }[] }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -32,17 +27,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Editar',
-        href: edit(customer).url,
+        href: edit(props.customer).url,
     }
 ];
 
-const submitForm = () => {
-    form.put(update(customer).url, {
-        preserveScroll: true,
-        onSuccess: () => toast.success('Cliente actualizado correctamente'),
-        onError: () => toast.error('Error al actualizar cliente'),
-    });
-};
+const { form, submit } = useCustomerForm(props.customer, update(props.customer).url, 'put');
 </script>
 
 <template>
@@ -56,7 +45,7 @@ const submitForm = () => {
                 </CardHeader>
 
                 <CardContent>
-                    <form @submit.prevent="submitForm" class="space-y-4">
+                    <form @submit.prevent="submit" class="space-y-4">
                         <!-- 2 columnas -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Tipo Identificación -->
